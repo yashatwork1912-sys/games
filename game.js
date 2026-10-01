@@ -72,30 +72,59 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Road background
-    ctx.fillStyle = "#444";
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, "#222");
+    gradient.addColorStop(1, "#444");
+    ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Road lines
-    ctx.strokeStyle = "white";
-    ctx.setLineDash([20, 20]);
-    ctx.lineWidth = 4;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.setLineDash([40, 40]);
+    ctx.lineDashOffset = -frameCount * obstacleSpeed;
+    ctx.lineWidth = 6;
     ctx.beginPath();
     ctx.moveTo(canvas.width / 2, 0);
     ctx.lineTo(canvas.width / 2, canvas.height);
     ctx.stroke();
+    ctx.setLineDash([]);
 
     // Car
     ctx.fillStyle = "cyan";
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 15;
     ctx.shadowColor = "cyan";
-    ctx.fillRect(carX, carY, carWidth, carHeight);
+    
+    // Draw car body
+    ctx.beginPath();
+    ctx.roundRect(carX, carY, carWidth, carHeight, 10);
+    ctx.fill();
+    
+    // Draw windshield
+    ctx.fillStyle = "rgba(0,0,0,0.5)";
+    ctx.fillRect(carX + 5, carY + 15, carWidth - 10, 15);
+    
+    // Draw headlights
+    ctx.fillStyle = "yellow";
+    ctx.shadowColor = "yellow";
+    ctx.fillRect(carX + 5, carY, 8, 5);
+    ctx.fillRect(carX + carWidth - 13, carY, 8, 5);
+    
     ctx.shadowBlur = 0;
 
     // Obstacles
-    ctx.fillStyle = "#ff4444";
     obstacles.forEach(obs => {
-        ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+        ctx.fillStyle = "#ff4444";
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#ff4444";
+        ctx.beginPath();
+        ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 5);
+        ctx.fill();
+        
+        // Detail on obstacle
+        ctx.fillStyle = "rgba(0,0,0,0.3)";
+        ctx.fillRect(obs.x + 5, obs.y + 10, obs.width - 10, 5);
     });
+    ctx.shadowBlur = 0;
 
     requestAnimationFrame(() => {
         update();
