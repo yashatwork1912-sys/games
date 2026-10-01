@@ -12,8 +12,6 @@ const startBtn = document.getElementById('start-btn');
 const playerNameInput = document.getElementById('player-name');
 const playerDisplay = document.querySelector('#player-display span');
 const tipElement = document.getElementById('tip');
-const pauseBtn = document.getElementById('pause-btn');
-const pauseScreen = document.getElementById('pause-screen');
 
 canvas.width = 400;
 
@@ -23,7 +21,6 @@ let score = 0;
 let highScore = localStorage.getItem('racingHighScore') || 0;
 let startTime = null;
 let gameActive = false;
-let isPaused = false;
 let carX = canvas.width / 2 - 20;
 const carY = canvas.height - 100;
 const carWidth = 40;
@@ -70,7 +67,7 @@ function spawnTree() {
 }
 
 function update() {
-    if (!gameActive || isPaused) return;
+    if (!gameActive) return;
 
     frameCount++;
     if (frameCount % 60 === 0) spawnObstacle();
@@ -230,12 +227,6 @@ hands.onResults((results) => {
         carX = (wrist.x * canvas.width) - (carWidth / 2);
         carX = Math.max(0, Math.min(canvas.width - carWidth, carX));
     }
-});
-
-pauseBtn.addEventListener('click', () => {
-    isPaused = !isPaused;
-    pauseScreen.style.display = isPaused ? "block" : "none";
-    pauseBtn.innerText = isPaused ? "Resume" : "Pause";
 });
 
 startBtn.addEventListener('click', () => {
