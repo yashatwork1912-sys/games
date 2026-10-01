@@ -70,7 +70,7 @@ function spawnTree() {
 }
 
 function update() {
-    if (!gameActive) return;
+    if (!gameActive || isPaused) return;
 
     frameCount++;
     if (frameCount % 60 === 0) spawnObstacle();
