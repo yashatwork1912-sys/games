@@ -189,20 +189,31 @@ hands.onResults((results) => {
     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const hand = results.multiHandLandmarks[0];
         
+        // CONTROL IMPROVEMENT:
+        // Calculate offset from the hand's current position to provide smoother movement
+        // rather than absolute position from center
         const wrist = hand[0];
-        const centerX = 0.5;
-        const sensitivity = 1.2;
+        const sensitivity = 0.05; // Adjust for smoothness
         
-        const diff = wrist.x - centerX;
-        carX = (canvas.width / 2 - carWidth / 2) + (diff * canvas.width * sensitivity);
+        // Using a simple lerp-like movement for smoother steering
+        const targetX = (wrist.x * canvas.width) - (carWidth / 2);
+        carX += (targetX - carX) * sensitivity;
         carX = Math.max(0, Math.min(canvas.width - carWidth, carX));
 
+        // PAUSE LOGIC: Fist Detection
+        // Fingertips (8,12,16,20) should be close to the palm/wrist for a fist
         const fingertips = [8, 12, 16, 20];
         const wristPos = hand[0];
         let isFist = true;
+        
         fingertips.forEach(idx => {
-            const dist = Math.sqrt(Math.pow(hand[idx].x - wristPos.x, 2) + Math.pow(hand[idx].y - wristPos.y, 2));
-            if (dist > 0.2) isFist = false;
+            // distance between fingertip and wrist
+            const dist = Math.sqrt(
+                Math.pow(hand[idx].x - wristPos.x, 2) + 
+                Math.pow(hand[idx].y - wristPos.y, 2)
+            );
+            // If any finger is extended (dist > 0.15), it's not a fist
+            if (dist > 0.15) isFist = false;
         });
 
         if (isFist && gameActive) {
