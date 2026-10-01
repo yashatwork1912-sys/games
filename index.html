@@ -12,14 +12,37 @@
 <body>
     <div id="game-container">
         <canvas id="gameCanvas"></canvas>
-        <div id="ui">
+        
+        <div id="start-screen">
+            <h1>Hand Gesture Racing</h1>
+            <input type="text" id="player-name" placeholder="Enter your name">
+            <div class="instructions">
+                <h3>How to Play:</h3>
+                <ul>
+                    <li>🖐️ <b>Move hand left/right</b> to steer the car</li>
+                    <li>✊ <b>Close fist (Punch)</b> to Pause game</li>
+                    <li>Avoid the red obstacles!</li>
+                </ul>
+            </div>
+            <button id="start-btn">Start Racing</button>
+        </div>
+
+        <div id="ui" style="display:none;">
+            <div id="player-display">Player: <span>-</span></div>
             <div id="score">Score: 0</div>
             <div id="highScore">High Score: 0</div>
             <div id="timer">Time: 0s</div>
+            <div id="tip">Tip: Stay focused!</div>
             <div id="status">Loading Camera...</div>
         </div>
+
+        <div id="pause-screen" style="display:none;">
+            <h1>PAUSED</h1>
+            <p>✊ Open your hand to resume</p>
+        </div>
+
         <div id="game-over" style="display:none;">
-            <h1>GAME OVER</h1>
+            <h1 id="game-over-title">GAME OVER</h1>
             <p id="final-score"></p>
             <button onclick="location.reload()">Restart</button>
         </div>

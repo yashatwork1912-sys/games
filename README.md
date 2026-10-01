@@ -1,48 +1,28 @@
 # 🏎️ Hand Gesture Racing Game
 
-A high-performance, browser-based racing game where you control the car using real-time hand tracking via your webcam. No keyboard or controller needed—just your hands!
+A high-speed racing game controlled entirely by your hand gestures using MediaPipe Hands.
 
-![Game Preview](https://via.placeholder.com/800x450?text=Hand+Gesture+Racing+Game+Preview)
-
-## ✨ Features
-
-- **Real-time Hand Tracking**: Powered by Google's MediaPipe Hands.
-- **Intuitive Controls**: Move your hand left and right to steer the car.
-- **Dynamic Difficulty**: Obstacle speed increases as you progress.
-- **Persistence**: High scores are saved locally in your browser.
-- **Responsive UI**: Professional game-over screens and real-time stat tracking.
-
-## 🚀 Quick Start
-
-### Prerequisites
-- A modern web browser (Chrome, Edge, or Firefox).
-- A webcam.
-
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yashatwork1912-sys/games.git
-   ```
-2. Navigate to the project folder:
-   ```bash
-   cd games
-   ```
-3. Open `index.html` in your browser.
-4. Grant camera permissions when prompted.
+## 🌟 Features
+- **Gesture Control**: Steer your car by moving your hand left and right.
+- **Pause Gesture**: Close your fist (punch) to pause the game instantly.
+- **Lively Landscape**: Animated road, green grass, and randomly spawning trees.
+- **Personalized Experience**: Enter your name to track your high score.
+- **Dynamic Difficulty**: Obstacles speed up as you progress.
+- **Tips & Instructions**: In-game tips and a clear starting guide.
 
 ## 🎮 How to Play
+1. **Start**: Enter your name and click "Start Racing".
+2. **Steering**: 
+   - Move your hand to the **Left** $\rightarrow$ Car moves **Left**.
+   - Move your hand to the **Right** $\rightarrow$ Car moves **Right**.
+3. **Pause**: Make a **Fist (Punch)** to pause the game. Open your hand to resume.
+4. **Goal**: Avoid the red obstacle cars and survive as long as possible!
 
-1. **Start**: Place your hand in front of the webcam. The game starts as soon as a hand is detected.
-2. **Steer**: Move your hand horizontally. The car will follow your hand's X-axis position.
-3. **Goal**: Avoid the red obstacles for as long as possible to maximize your score and time.
-4. **Game Over**: If you hit an obstacle, the game ends. Check your final score and try to beat your high score!
+## 🛠️ Technical Stack
+- **HTML5 Canvas**: For game rendering.
+- **CSS3**: For UI and styling.
+- **JavaScript**: Game logic and state management.
+- **MediaPipe Hands**: For real-time hand tracking and gesture recognition.
 
-## 🛠️ Tech Stack
-
-- **HTML5 Canvas**: For high-performance 2D rendering.
-- **CSS3**: For modern UI and layout.
-- **JavaScript (ES6+)**: Game logic and state management.
-- **MediaPipe Hands**: For AI-powered hand landmark detection.
-
-## 📜 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🚀 Getting Started
+Simply open `index.html` in a modern web browser (Chrome/Edge recommended) and allow camera access.

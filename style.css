@@ -41,32 +41,82 @@ body {
     color: #aaa;
 }
 
-#game-over {
+#start-screen, #pause-screen, #game-over {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.9);
     color: white;
     padding: 40px;
     text-align: center;
     border-radius: 20px;
-    border: 2px solid white;
+    border: 2px solid cyan;
     font-family: Arial, sans-serif;
+    z-index: 10;
+    min-width: 300px;
 }
 
-#game-over h1 {
-    font-size: 48px;
-    margin: 0 0 20px 0;
-    color: #ff4444;
-}
-
-#game-over button {
-    padding: 10px 20px;
+#start-screen input {
+    padding: 10px;
     font-size: 18px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+}
+
+.instructions {
+    text-align: left;
+    margin: 20px 0;
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.instructions ul {
+    list-style: none;
+    padding: 0;
+}
+
+.instructions li {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+#start-btn {
+    padding: 15px 30px;
+    font-size: 20px;
     cursor: pointer;
     background: cyan;
     border: none;
     border-radius: 5px;
     font-weight: bold;
+    transition: 0.3s;
+}
+
+#start-btn:hover {
+    background: #00cccc;
+    transform: scale(1.05);
+}
+
+#ui {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    pointer-events: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#player-display, #tip {
+    font-size: 18px;
+    color: cyan;
+    font-weight: bold;
+}
+
+#tip {
+    font-style: italic;
+    font-weight: normal;
+    color: #aaa;
 }
