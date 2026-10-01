@@ -11,7 +11,6 @@ const startScreen = document.getElementById('start-screen');
 const startBtn = document.getElementById('start-btn');
 const playerNameInput = document.getElementById('player-name');
 const playerDisplay = document.querySelector('#player-display span');
-const pauseScreen = document.getElementById('pause-screen');
 const tipElement = document.getElementById('tip');
 
 canvas.width = 400;
@@ -21,7 +20,6 @@ let score = 0;
 let highScore = localStorage.getItem('racingHighScore') || 0;
 let startTime = null;
 let gameActive = false;
-let isPaused = false;
 let carX = canvas.width / 2 - 20;
 const carY = canvas.height - 100;
 const carWidth = 40;
@@ -31,16 +29,30 @@ highScoreElement.innerText = `High Score: ${highScore}`;
 
 const obstacles = [];
 const trees = [];
+const particles = [];
 let obstacleSpeed = 5;
 let frameCount = 0;
 
 const tips = [
     "Keep your hand steady!",
     "Watch out for fast red cars!",
-    "Punch to pause the game!",
+    "Fast reflexes win the race!",
     "Stay in the center for better control!",
     "Concentrate on the road!"
 ];
+
+function createSmoke(x, y) {
+    for (let i = 0; i < 20; i++) {
+        particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 5,
+            vy: (Math.random() - 0.5) * 5,
+            size: Math.random() * 15 + 5,
+            life: 1.0,
+            color: `rgba(150, 150, 150, ${Math.random()})`
+        });
+    }
+}
 
 function spawnObstacle() {
     const x = Math.random() * (canvas.width - carWidth);
@@ -54,7 +66,7 @@ function spawnTree() {
 }
 
 function update() {
-    if (!gameActive || isPaused) return;
+    if (!gameActive) return;
 
     frameCount++;
     if (frameCount % 60 === 0) spawnObstacle();
@@ -79,6 +91,7 @@ function update() {
             carY < obstacles[i].y + obstacles[i].height &&
             carY + carHeight > obstacles[i].y
         ) {
+            createSmoke(carX + carWidth / 2, carY + carHeight / 2);
             endGame();
         }
     }
@@ -87,6 +100,14 @@ function update() {
     for (let i = trees.length - 1; i >= 0; i--) {
         trees[i].y += obstacleSpeed;
         if (trees[i].y > canvas.height) trees.splice(i, 1);
+    }
+
+    // Update particles (smoke)
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].x += particles[i].vx;
+        particles[i].y += particles[i].vy;
+        particles[i].life -= 0.02;
+        if (particles[i].life <= 0) particles.splice(i, 1);
     }
 
     obstacleSpeed += 0.001;
@@ -140,6 +161,16 @@ function draw() {
         ctx.fillRect(tree.x + tree.size/2 - 5, tree.y + tree.size, 10, 10);
     });
 
+    // Smoke
+    particles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    ctx.globalAlpha = 1.0;
+
     // Car
     ctx.fillStyle = "cyan";
     ctx.shadowBlur = 15;
@@ -189,40 +220,11 @@ hands.onResults((results) => {
     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const hand = results.multiHandLandmarks[0];
         
-        // CONTROL IMPROVEMENT:
-        // Calculate offset from the hand's current position to provide smoother movement
-        // rather than absolute position from center
+        // DYNAMIC & FAST CONTROL
         const wrist = hand[0];
-        const sensitivity = 0.05; // Adjust for smoothness
-        
-        // Using a simple lerp-like movement for smoother steering
-        const targetX = (wrist.x * canvas.width) - (carWidth / 2);
-        carX += (targetX - carX) * sensitivity;
+        // Fast response using direct mapping
+        carX = (wrist.x * canvas.width) - (carWidth / 2);
         carX = Math.max(0, Math.min(canvas.width - carWidth, carX));
-
-        // PAUSE LOGIC: Fist Detection
-        // Fingertips (8,12,16,20) should be close to the palm/wrist for a fist
-        const fingertips = [8, 12, 16, 20];
-        const wristPos = hand[0];
-        let isFist = true;
-        
-        fingertips.forEach(idx => {
-            // distance between fingertip and wrist
-            const dist = Math.sqrt(
-                Math.pow(hand[idx].x - wristPos.x, 2) + 
-                Math.pow(hand[idx].y - wristPos.y, 2)
-            );
-            // If any finger is extended (dist > 0.15), it's not a fist
-            if (dist > 0.15) isFist = false;
-        });
-
-        if (isFist && gameActive) {
-            isPaused = true;
-            pauseScreen.style.display = "block";
-        } else if (!isFist && isPaused) {
-            isPaused = false;
-            pauseScreen.style.display = "none";
-        }
     }
 });
 
